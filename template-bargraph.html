@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <style>
+        * {
+            font-family: sans-serif;
+        }
+        svg {
+            border: 2px solid #000;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 50px;
+        }
+        .projectTitle {
+            text-align: center;
+            font-size: 26px;
+            margin: 10px;
+        }
+        .itemLabel, .itemLegend {
+            color: #000;
+            fill: #000;
+            font-size: 16px;
+        }
+        .bar, .itemMetricsLegend, .itemBarLabel, .metricLabel {
+            font-size: 16px;
+            fill: green;
+            color: green;
+        }
+        .itemBarLabelNegative {
+            font-size: 16px;
+            fill: red;
+            color: red;
+        }
+        .itemMetricsLegend, .itemLegend {
+            text-anchor: middle;
+        }
+        .itemLegend {
+            transform: rotate(-90deg);
+        }
+        div.tooltip {
+            position: absolute;
+            text-align: center;
+            padding: .5rem;
+            background: #FFFFFF;
+            color: #313639;
+            border: 1px solid #313639;
+            border-radius: 8px;
+            pointer-events: none;
+            font-size: 1.3rem;
+        }
+        .barSubtitle {
+            font-size: 10px;
+        }
+    </style>
+
+    <script>
+        let addGraph = (itemIDs, itemMetrics, itemTitles, graphTitle, itemsLegend, itemMetricsLegend, itemMetricLabelFormatter) => {
+            var titleDiv = document.createElement('div')
+            titleDiv.classList.add('projectTitle')
+            titleDiv.innerHTML = graphTitle
+            document.querySelector('body').append(titleDiv)
+
+            let toolTipDiv = d3.select('div.tooltip').node() ? d3.select('div.tooltip') : d3.select('body').append('div')
+                 .attr('class', 'tooltip')
+                 .style('opacity', 0)
+
+            let margin = {top: 30, right: 80, bottom: 50, left: 100}
+            let svgWidth = 820, svgHeight = (itemIDs.length * 40) + 100
+            let height = svgHeight - margin.top - margin.bottom, width = svgWidth - margin.left - margin.right
+
+            let x = d3.scaleLinear().rangeRound([0, width]),
+                y = d3.scaleBand().rangeRound([0, height]).padding(0.35)
+
+            x.domain([0, 5 + d3.max(itemMetrics, d => { return d })])
+            y.domain(itemIDs)
+
+            let svg = d3.select('body')
+                .append('svg')
+
+            svg.attr('height', svgHeight)
+                .attr('width', svgWidth)
+
+            svg = svg.append('g')
+                .attr('transform', `translate($${margin.left}, $${margin.top})`)
+
+            svg.append('g')
+                .attr('class' , 'metricLabel')
+                .attr('transform', `translate(0, $${height})`)
+                .call(d3.axisBottom(x))
+
+            svg.append('g')
+                .attr('class' , 'itemLabel')
+                .call(d3.axisLeft(y))
+
+            let bars = svg.selectAll('.bar')
+                .data(itemIDs)
+                .enter()
+                .append('g')
+                .on('mouseover', (event, d) => {
+                    d3.select(this).transition()
+                       .duration('50')
+                       .attr('opacity', '.85')
+                    toolTipDiv.transition()
+                       .duration(50)
+                       .style('opacity', 1)
+
+                    toolTipDiv.html(`$${d} - $${itemTitles[itemIDs.indexOf(d)]}`)
+                       .style('left', (event.pageX + 10) + 'px')
+                       .style('top', (event.pageY - 15) + 'px')
+                })
+                .on('mouseout', () => {
+                    // return
+                    d3.select(this).transition()
+                       .duration('50')
+                       .attr('opacity', '1')
+                    toolTipDiv.transition()
+                       .duration('50')
+                       .style('opacity', 0)
+                })
+
+            let minBarWidth = 4
+
+            bars.append('rect')
+                .attr('class', 'bar')
+                .attr('x', d => { return 0 })
+                .attr('y', d => { return y(d) })
+                .attr('width', (d, i) => {return Math.max(minBarWidth, x(parseInt(itemMetrics[i])))})
+                .attr('height', d => { return y.bandwidth() })
+
+            bars.append('text')
+                .text((d, i) => {
+                    return itemTitles[i]
+                })
+                .attr('x', (d, i) => {
+                    return 3
+                })
+                .attr('y', d => {
+                    return y(d) + y.bandwidth() + 9
+                })
+                .attr('class' , 'barSubtitle')
+
+            bars.append('text')
+                .text((d, i) => {
+                    return itemMetricLabelFormatter(itemMetrics[i])
+                })
+                .attr('x', (d, i) => {
+                    return Math.max(minBarWidth, x(parseInt(itemMetrics[i]))) + 5
+                })
+                .attr('y', d => {
+                    return y(d) + y.bandwidth() * (0.5 + 0.1) // 0.1 padding scale
+                })
+                .attr('class', (d, i) => {
+                    return itemMetrics[i] >= 0 ? 'itemBarLabel' : 'itemBarLabelNegative'
+                })
+
+            svg.append('text')
+                .attr('class', 'itemMetricsLegend')
+                .attr('transform', `translate($${width / 2}, $${height + margin.bottom - 5})`)
+                .text(itemMetricsLegend)
+
+            svg.append('text')
+                .attr('class', 'itemLegend')
+                .attr('y', 0 - margin.left)
+                .attr('x', 0 - (height / 2))
+                .attr('dy', '1em')
+                .text(itemsLegend)
+        }
+
+        document.addEventListener('readystatechange', event => {
+            if (event.target.readyState !== 'complete') {
+                return
+            }
+            $ADD_GRAPHS_JS
+        })
+    </script>
+  </head>
+  <body>
+  </body>
+</html>

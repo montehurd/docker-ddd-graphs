@@ -1,7 +1,5 @@
 
-This repository was made to as a proof of concept of the article [Flask Debugging in VS Code with Hot-Reload 🔥](https://blog.theodo.com/2020/05/debug-flask-vscode/).
-
-Reading the article is strongly recommended 😉.
+Based on repo from [Flask Debugging in VS Code with Hot-Reload 🔥](https://blog.theodo.com/2020/05/debug-flask-vscode/).
 
 ## 🔧 Prerequisites
 
@@ -40,10 +38,3 @@ Reading the article is strongly recommended 😉.
     ```bash
     Press simultaniously CTRL + ALT + T and you will get a popup widow were you can choose your option 
     ```
-    ![VSCode Task Options](/assets/png/vsCodeTasksOptions.PNG)
-
-If you want to run the app as a top-level script, checkout to the `flask-as-a-script` branch.
-
-```bash
-git checkout flask-as-a-script
-```

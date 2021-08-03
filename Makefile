@@ -8,7 +8,7 @@ help:
 install: ## 🛠  setup the flask Docker container, install the requirements...
 	docker-compose build flask-server
 	rm -rf ddd
-	git clone https://gerrit.wikimedia.org/r/releng/ddd.git && cd ddd && git fetch "https://gerrit.wikimedia.org/r/releng/ddd" refs/changes/19/708319/1 && git checkout -b change-708319-1 FETCH_HEAD
+	git clone https://gerrit.wikimedia.org/r/releng/ddd.git && cd ddd && git fetch "https://gerrit.wikimedia.org/r/releng/ddd" refs/changes/19/708319/2 && git checkout -b change-708319-2 FETCH_HEAD
 
 
 ## Start the 🐳 Dockerized flask application in local environment

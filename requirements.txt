@@ -2,3 +2,5 @@
 flask[async]
 gunicorn
 debugpy
+requests
+rich

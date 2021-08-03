@@ -7,6 +7,9 @@ initialize_flask_server_debugger_if_needed()
 
 app = Flask(__name__)
 
+async def start():
+    return "Hello!"
+
 @app.route("/")
-def home():
-    return "Hello, Flask!"
+async def home():
+    return await start()

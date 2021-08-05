@@ -4,3 +4,4 @@ gunicorn
 debugpy
 requests
 rich
+https://gitlab.wikimedia.org/releng/ddd/-/archive/workboard-metrics/ddd-workboard-metrics.zip

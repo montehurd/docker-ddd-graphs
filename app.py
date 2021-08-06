@@ -1,5 +1,5 @@
 from flask import Flask, request
-import sys, json, subprocess, functools, operator, time, asyncio
+import sys, json, subprocess, functools, operator, time, asyncio, os
 from pprint import pprint
 from datetime import datetime, timezone
 from string import Template
@@ -26,7 +26,7 @@ app = Flask(__name__)
 # http://localhost:8381/?projectNames=Test-Project
 # http://localhost:8381/?projectPHIDs=PHID-PROJ-egwedyhdplvmss4qfzv4,PHID-PROJ-htdrulsasg7rxvnfvp5g
 # phab = Conduit(phab_url = 'http://docker-phabricator_phabricator_1:80/api/', token = 'api-pkzahk74gg7tpnltwmhhok5xwt4i')
-phab = Conduit(phab_url = 'http://docker-phabricator-wmf_phabricator_1:80/api/', token = 'api-pkzahk74gg7tpnltwmhhok5xwt4i')
+phab = Conduit(phab_url = os.getenv('CONDUIT_URL'), token = os.getenv('CONDUIT_TOKEN'))
 
 def localTimezoneDateStringFromTimeStamp(ts):
     local_now = datetime.now().astimezone()

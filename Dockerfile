@@ -9,9 +9,15 @@ ENV PYTHONDONTWRITEBYTECODE 1
 # Turns off buffering for easier container logging
 ENV PYTHONUNBUFFERED 1
 
+
+
 # app.py and `ddd` use these
 ENV CONDUIT_TOKEN "api-pkzahk74gg7tpnltwmhhok5xwt4i"
 ENV CONDUIT_URL "http://docker-phabricator-wmf_phabricator_1:80/api/"
+# ENV CONDUIT_TOKEN ""
+# ENV CONDUIT_URL "https://phabricator.wikimedia.org/api/"
+
+
 
 # Install pip requirements
 ADD requirements.txt .

@@ -67,12 +67,14 @@ async def start():
     cursor.close()
     connection.close()
 
+    columnKeys = sorted(columns, key=columns.get) # columns.keys()
+
     timesInColumsGraphJS = ''
     if len(taskTimeInColumns) > 0:
         timesInColumsGraphJS = f'''
             addGraph(
-                {json.dumps([columns[columnID] for columnID in columns.keys()])},
-                {json.dumps([round(taskTimeInColumns[columnID] / (60 * 60 * 24), 1) if columnID in taskTimeInColumns else 0 for columnID in columns.keys()])},
+                {json.dumps([columns[columnID] for columnID in columnKeys])},
+                {json.dumps([round(taskTimeInColumns[columnID] / (60 * 60 * 24), 1) if columnID in taskTimeInColumns else 0 for columnID in columnKeys])},
                 {[]},
                 '<b>Task Time in Columns</b><br>T{taskID} on <i>{projectName}</i>',
                 'Column',
